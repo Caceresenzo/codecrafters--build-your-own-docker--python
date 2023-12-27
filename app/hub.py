@@ -94,7 +94,11 @@ def _download_layer_digest(image_name: str, layer_digest: str, access_token: str
 
 
 def pull(image: str, root_path: str):
-    name, label = image.split(":", 2)
+    if ":" not in image:
+        name, label = image, "latest"
+    else:
+        name, label = image.split(":", 2)
+
     if "/" not in name:
         name = f"library/{name}"
 
