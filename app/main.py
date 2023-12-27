@@ -1,18 +1,12 @@
-import subprocess
+import os
 import sys
 
 
 def main():
-    # You can use print statements as follows for debugging, they'll be visible when running tests.
-    # print("Logs from your program will appear here!")
+    image = sys.argv[2]
+    argv = sys.argv[3:]
 
-    # Uncomment this block to pass the first stage
-    #
-    command = sys.argv[3]
-    args = sys.argv[4:]
-    
-    completed_process = subprocess.run([command, *args], capture_output=True)
-    print(completed_process.stdout.decode("utf-8"))
+    os.execv(argv[0], argv)
 
 
 if __name__ == "__main__":
