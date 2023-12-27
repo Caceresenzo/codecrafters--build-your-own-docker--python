@@ -3,6 +3,7 @@ import sys
 import tempfile
 import shutil
 
+from . import libc
 
 def main():
     image = sys.argv[2]
@@ -18,7 +19,7 @@ def main():
         pid = os.fork()
         if not pid:
             os.chroot(root_path)
-            os.unshare(os.CLONE_NEWPID);
+            libc.unshare(libc.CLONE_NEWPID);
             os.execv(argv[0], argv)
 
         _, status = os.waitpid(pid, 0)
