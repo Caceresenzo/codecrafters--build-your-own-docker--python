@@ -1,18 +1,29 @@
 import os
 import sys
+import tempfile
+import shutil
 
 
 def main():
     image = sys.argv[2]
     argv = sys.argv[3:]
 
-    pid = os.fork()
-    if not pid:
-        os.execv(argv[0], argv)
+    program_path = argv[0]
 
-    _, status = os.waitpid(pid, 0)
-    exit_code = os.WEXITSTATUS(status)
-    sys.exit(exit_code)
+    with tempfile.TemporaryDirectory() as root_path:
+        program_dir = os.path.join(root_path, "./" + os.path.dirname(program_path))
+        os.makedirs(program_dir, exist_ok=True)
+        shutil.copy2(program_path, program_dir)
+
+        pid = os.fork()
+        if not pid:
+            os.chroot(root_path)
+            os.execv(argv[0], argv)
+
+        _, status = os.waitpid(pid, 0)
+        exit_code = os.WEXITSTATUS(status)
+        sys.exit(exit_code)
+
 
 if __name__ == "__main__":
     main()
