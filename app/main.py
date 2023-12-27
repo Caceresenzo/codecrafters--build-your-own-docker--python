@@ -1,24 +1,19 @@
-import os
-
-import click
-
-
-@click.group()
-def cli():
-    pass
+import subprocess
+import sys
 
 
-@cli.command()
-@click.argument("image")
-@click.argument("argv", nargs=-1)
-def run(
-    image: str,
-    argv: list
-):
-    argv = list(argv)
+def main():
+    # You can use print statements as follows for debugging, they'll be visible when running tests.
+    # print("Logs from your program will appear here!")
 
-    os.execv(argv[0], argv)
+    # Uncomment this block to pass the first stage
+    #
+    command = sys.argv[3]
+    args = sys.argv[4:]
+    
+    completed_process = subprocess.run([command, *args], capture_output=True)
+    print(completed_process.stdout.decode("utf-8"))
 
 
 if __name__ == "__main__":
-    cli()
+    main()

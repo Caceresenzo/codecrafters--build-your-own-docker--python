@@ -10,8 +10,6 @@ RUN chmod +x /usr/local/bin/docker-explorer
 ADD . /app
 WORKDIR /app
 
-RUN pip install -r app/requirements.txt
-
 RUN sed -i -e 's/\r$//' /app/your_docker.sh
 
 ENTRYPOINT ["/app/your_docker.sh"]
